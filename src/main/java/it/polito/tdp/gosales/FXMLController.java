@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.gosales.model.Model;
+import it.polito.tdp.gosales.model.Retailers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -31,16 +32,16 @@ public class FXMLController {
     private Button btnSimula;
 
     @FXML
-    private ComboBox<?> cmbAnno;
+    private ComboBox<Integer> cmbAnno;
 
     @FXML
-    private ComboBox<?> cmbNazione;
+    private ComboBox<String> cmbNazione;
 
     @FXML
     private ComboBox<?> cmbProdotto;
 
     @FXML
-    private ComboBox<?> cmbRivenditore;
+    private ComboBox<Retailers> cmbRivenditore;
 
     @FXML
     private TextArea txtArchi;
@@ -62,12 +63,58 @@ public class FXMLController {
 
     @FXML
     void doAnalizzaComponente(ActionEvent event) {
-
+    	Retailers r = this.cmbRivenditore.getValue();
+    	if(r == null) {
+    		this.txtResult.setText("Seleziona un rivenditore dal menu");
+    		return;
+    	}
+    	
+    	model.componenteConnessa(r);
+    	this.txtResult.appendText("\nLa componente connessa di " + r + " è: " + model.getnConnessi());
+    	this.txtResult.appendText("\nIl peso della componente connessa è: " + model.getPesoConnessa());
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	//controllo anno
+    	Integer anno = this.cmbAnno.getValue();
+    	if(anno == null) {
+    		this.txtResult.setText("Seleziona un anno dal menu");
+    		return;
+    	}
+    	//controllo nazione
+    	String country = this.cmbNazione.getValue();
+    	if(country == null) {
+    		this.txtResult.setText("Seleziona una nazione dal menu");
+    		return;
+    	}
+    	//controllo inserimento M
+    	String input = this.txtNProdotti.getText();
+    	int minimo = 0;
+       	try {
+    		minimo =Integer.parseInt(input);
+    	}catch(NumberFormatException e) {
+    		this.txtResult.setText("Inserire un valore accettabile");
+    		return;
+    	}
+    	
+    	this.txtResult.setText("Creo grafo....");
+    	
+    	
+    	//grazione grafo
+    	model.creaGrafo(country, anno, minimo);
+    	
+    	//stampa grafo
+    	this.txtResult.setText("Il grafo è stato creato e contiene; ");
+    	this.txtResult.appendText("\nVertici: " + model.getGrafo().vertexSet().size());
+    	this.txtResult.appendText("\nArchi: " + model.getGrafo().edgeSet().size());
+    	
+    	this.txtVertici.setText(model.stampaVertici());
+    	this.txtArchi.setText(model.stampaArchi());
 
+
+    	this.cmbRivenditore.getItems().addAll(model.getVertici());
+    	
     }
 
     @FXML
@@ -95,6 +142,12 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	this.cmbAnno.getItems().add(2015);
+    	this.cmbAnno.getItems().add(2016);
+    	this.cmbAnno.getItems().add(2017);
+    	this.cmbAnno.getItems().add(2018);
+    	
+    	this.cmbNazione.getItems().addAll(model.getCountry());
     }
 
 }

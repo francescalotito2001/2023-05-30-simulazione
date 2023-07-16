@@ -95,12 +95,12 @@
                         <Insets left="130.0" />
                      </HBox.margin>
                   </Label>
-                  <ComboBox fx:id="cmbRivenditore" disable="true" prefWidth="200.0">
+                  <ComboBox fx:id="cmbRivenditore" prefWidth="200.0">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
                   </ComboBox>
-                  <Button fx:id="btnAnalizzaComponente" disable="true" mnemonicParsing="false" onAction="#doAnalizzaComponente" text="Analizza Componente">
+                  <Button fx:id="btnAnalizzaComponente" mnemonicParsing="false" onAction="#doAnalizzaComponente" text="Analizza Componente">
                      <font>
                         <Font size="14.0" />
                      </font>
